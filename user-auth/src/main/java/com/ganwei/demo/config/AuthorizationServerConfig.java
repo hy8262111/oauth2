@@ -1,5 +1,6 @@
 package com.ganwei.demo.config;
 
+import com.ganwei.demo.exception.CustomWebResponseExceptionTranslator;
 import com.ganwei.demo.service.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,11 +36,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private TokenStore tokenStore;
 
+    @Autowired
+    private CustomWebResponseExceptionTranslator customWebResponseExceptionTranslator;
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(tokenStore)
                 .authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService);
+
+        //添加异常处理
+        endpoints.exceptionTranslator(customWebResponseExceptionTranslator);
     }
 
     @Bean
